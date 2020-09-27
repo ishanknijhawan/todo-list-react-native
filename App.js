@@ -1,57 +1,57 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    Button,
+    FlatList,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
+
+import GoalItem from "./components/goalItem";
+import GoalInput from "./components/goalInput";
 
 export default function App() {
-    const [enteredGoal, addGoal] = useState("");
     const [goalsList, setGoalsList] = useState([]);
-    const courseGoalHandler = (enteredText) => {
-        addGoal(enteredText);
-    };
-    const addGoalHandler = () => {
-        setGoalsList((currentGoals) => [...currentGoals, enteredGoal]);
+
+    const addGoalHandler = (goalTitle) => {
+        setGoalsList((currentGoals) => {
+            return [
+                ...currentGoals,
+                //convert key to string because FlatList expects a 'String' key
+                { key: Math.random().toString(), value: goalTitle },
+            ];
+        });
+        //empty the text input after adding goal
+        //addGoal("");
     };
     //flexbox tips
     //justify content is for the main axis
     //align items is for the cross axis
     return (
-        <View style={{ padding: 20 }}>
-            <View style={styles.main}>
-                <View style={styles.textInput}>
-                    <TextInput
-                        placeholder="Course goals"
-                        onChangeText={courseGoalHandler}
-                        value={enteredGoal}
-                    ></TextInput>
-                </View>
-                <View style={styles.button}>
-                    <Button title="Add" onPress={addGoalHandler} />
-                </View>
-            </View>
-            <View>
+        <View style={styles.screen}>
+            <GoalInput onClick={addGoalHandler} />
+            {/* <ScrollView>
                 {goalsList.map((element) => (
-                    <Text>{element}</Text>
+                    <Text key={element} style={styles.goal}>
+                        {element}
+                    </Text>
                 ))}
-            </View>
+            </ScrollView> */}
+            {/* because scrollviews can be very inefficient for large lists 
+            below is the FlatList, which is like RecyclerView from android */}
+            <FlatList
+                data={goalsList}
+                renderItem={(itemData) => (
+                    <GoalItem title={itemData.item.value} />
+                )}
+            />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    main: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-around",
-    },
-    textInput: {
-        width: "85%",
-        margin: 20,
-        marginStart: 10,
-        marginEnd: 10,
-        padding: 5,
-        borderRadius: 5,
-        borderColor: "grey",
-        borderWidth: 1,
-    },
-    button: { elevation: 10, shadowColor: "#f9f9" },
+    screen: { padding: 20 },
 });
