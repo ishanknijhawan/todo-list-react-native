@@ -27,6 +27,12 @@ export default function App() {
         //empty the text input after adding goal
         //addGoal("");
     };
+
+    const removeGoalHandler = (goalId) => {
+        setGoalsList((currentGoals) => {
+            return currentGoals.filter((goal) => goal.key !== goalId);
+        });
+    };
     //flexbox tips
     //justify content is for the main axis
     //align items is for the cross axis
@@ -45,7 +51,11 @@ export default function App() {
             <FlatList
                 data={goalsList}
                 renderItem={(itemData) => (
-                    <GoalItem title={itemData.item.value} />
+                    <GoalItem
+                        title={itemData.item.value}
+                        id={itemData.item.key}
+                        onDelete={removeGoalHandler}
+                    />
                 )}
             />
         </View>
