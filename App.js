@@ -18,14 +18,18 @@ export default function App() {
     const [isAdd, setIsAdd] = useState(false);
 
     const addGoalHandler = (goalTitle) => {
-        setGoalsList((currentGoals) => {
-            return [
-                ...currentGoals,
-                //convert key to string because FlatList expects a 'String' key
-                { key: Math.random().toString(), value: goalTitle },
-            ];
-        });
-        setIsAdd(false);
+        if (goalTitle === "") {
+            return;
+        } else {
+            setGoalsList((currentGoals) => {
+                return [
+                    ...currentGoals,
+                    //convert key to string because FlatList expects a 'String' key
+                    { key: Math.random().toString(), value: goalTitle },
+                ];
+            });
+            setIsAdd(false);
+        }
         //empty the text input after adding goal
         //addGoal("");
     };
