@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import { View, Text, Button, TextInput, StyleSheet, Modal } from "react-native";
 
 const GoalInput = (props) => {
     const [enteredGoal, addGoal] = useState("");
@@ -8,33 +8,58 @@ const GoalInput = (props) => {
     };
 
     return (
-        <View style={styles.main}>
-            <View style={styles.textInput}>
-                <TextInput
-                    placeholder="Course goals"
-                    onChangeText={courseGoalHandler}
-                    value={enteredGoal}
-                ></TextInput>
+        <Modal visible={props.visible} animationType="slide">
+            <View style={styles.modal}>
+                <View style={styles.textInput}>
+                    <TextInput
+                        placeholder="Course goals"
+                        onChangeText={courseGoalHandler}
+                        value={enteredGoal}
+                    ></TextInput>
+                </View>
+
+                <View style={styles.buttons}>
+                    <View style={styles.inb}>
+                        <Button
+                            title="Cancel"
+                            onPress={props.onCancel}
+                            color="red"
+                            //or you can use props.onClick.bind(this, enteredGoal)
+                        />
+                    </View>
+                    <View style={styles.inb}>
+                        <Button
+                            title="Add"
+                            onPress={() => {
+                                props.onClick(enteredGoal);
+                                addGoal("");
+                            }}
+                            //or you can use props.onClick.bind(this, enteredGoal)
+                        />
+                    </View>
+                </View>
             </View>
-            <View style={styles.button}>
-                <Button
-                    title="Add"
-                    onPress={() => props.onClick(enteredGoal)}
-                    //or you can use props.onClick.bind(this, enteredGoal)
-                />
-            </View>
-        </View>
+        </Modal>
     );
 };
 
 const styles = StyleSheet.create({
-    main: {
+    buttons: {
         flexDirection: "row",
+        width: "60%",
+        justifyContent: "space-evenly",
+    },
+    modal: {
+        flex: 1,
+        borderColor: "grey",
+        borderWidth: 1,
+        borderRadius: 5,
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-around",
+        justifyContent: "center",
     },
     textInput: {
-        width: "85%",
+        width: "90%",
         margin: 20,
         marginStart: 10,
         marginEnd: 10,
@@ -43,7 +68,19 @@ const styles = StyleSheet.create({
         borderColor: "grey",
         borderWidth: 1,
     },
-    button: { elevation: 10, shadowColor: "#f9f9" },
+    button: {
+        elevation: 10,
+        shadowColor: "#f9f9",
+        margin: 5,
+        flex: 1,
+        justifyContent: "space-around",
+    },
+    inb: {
+        overflow: "hidden",
+        borderRadius: 5,
+        margin: 10,
+        flex: 1,
+    },
 });
 
 export default GoalInput;

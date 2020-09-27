@@ -15,6 +15,7 @@ import GoalInput from "./components/goalInput";
 
 export default function App() {
     const [goalsList, setGoalsList] = useState([]);
+    const [isAdd, setIsAdd] = useState(false);
 
     const addGoalHandler = (goalTitle) => {
         setGoalsList((currentGoals) => {
@@ -24,6 +25,7 @@ export default function App() {
                 { key: Math.random().toString(), value: goalTitle },
             ];
         });
+        setIsAdd(false);
         //empty the text input after adding goal
         //addGoal("");
     };
@@ -38,7 +40,17 @@ export default function App() {
     //align items is for the cross axis
     return (
         <View style={styles.screen}>
-            <GoalInput onClick={addGoalHandler} />
+            <View style={styles.button}>
+                <Button
+                    title="Add Goal"
+                    onPress={() => setIsAdd(true)}
+                ></Button>
+            </View>
+            <GoalInput
+                onClick={addGoalHandler}
+                visible={isAdd}
+                onCancel={() => setIsAdd(false)}
+            />
             {/* <ScrollView>
                 {goalsList.map((element) => (
                     <Text key={element} style={styles.goal}>
@@ -64,4 +76,5 @@ export default function App() {
 
 const styles = StyleSheet.create({
     screen: { padding: 20 },
+    button: { margin: 20 },
 });
